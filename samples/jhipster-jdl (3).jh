@@ -1,0 +1,18 @@
+
+entity Customer {
+	 name String
+	lastName String 
+	phone String
+}
+
+entity Yard {
+	streetandnumber String 
+	city String 
+	frequenceSummer Integer 
+	frequenceWinter Integer
+	dateDone ZonedDateTime
+}
+
+relationship OneToMany {
+	Customer{yards} to Yard,    
+}

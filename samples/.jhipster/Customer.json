@@ -1,0 +1,37 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "yards",
+            "otherEntityName": "yard",
+            "otherEntityRelationshipName": "customer"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "phone",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "iduser",
+            "fieldType": "Long"
+        }
+    ],
+    "changelogDate": "20181113132035",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "customer",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

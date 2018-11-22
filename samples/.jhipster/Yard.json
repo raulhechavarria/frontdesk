@@ -1,0 +1,42 @@
+{
+    "name": "Yard",
+    "fields": [
+        {
+            "fieldName": "streetandnumber",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "city",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "frequenceSummer",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "frequenceWinter",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dateDone",
+            "fieldType": "ZonedDateTime"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipName": "customer",
+            "otherEntityName": "customer",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20181113132036",
+    "entityTableName": "yard",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}
