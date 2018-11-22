@@ -1,13 +1,10 @@
 entity Pack{
-	 name String
+	 
+     name String
 	 nameFrontDeskReceive String
-	  nameFrontDeskDelivery String
-
+	 nameFrontDeskDelivery String
 	 namePickup String
-
-	  dateReceived date
-
-	  datePickup date
-	
-	  pixel ImageBlob
+	 dateReceived LocalDate
+	 datePickup LocalDate
+	 pixel ImageBlob
 }
