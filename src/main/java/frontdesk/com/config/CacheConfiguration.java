@@ -38,6 +38,7 @@ public class CacheConfiguration {
             cm.createCache(frontdesk.com.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(frontdesk.com.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(frontdesk.com.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            cm.createCache(frontdesk.com.domain.Pack.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

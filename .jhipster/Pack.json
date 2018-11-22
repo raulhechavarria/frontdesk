@@ -1,0 +1,44 @@
+{
+    "name": "Pack",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "nameFrontDeskReceive",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "nameFrontDeskDelivery",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "namePickup",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "dateReceived",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "datePickup",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "pixel",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20181122165107",
+    "entityTableName": "pack",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}
