@@ -2,9 +2,11 @@ package frontdesk.com.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import frontdesk.com.domain.Pack;
-import frontdesk.com.repository.PackRepository;
+import frontdesk.com.service.PackService;
 import frontdesk.com.web.rest.errors.BadRequestAlertException;
 import frontdesk.com.web.rest.util.HeaderUtil;
+import frontdesk.com.service.dto.PackCriteria;
+import frontdesk.com.service.PackQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +30,13 @@ public class PackResource {
 
     private static final String ENTITY_NAME = "pack";
 
-    private final PackRepository packRepository;
+    private final PackService packService;
 
-    public PackResource(PackRepository packRepository) {
-        this.packRepository = packRepository;
+    private final PackQueryService packQueryService;
+
+    public PackResource(PackService packService, PackQueryService packQueryService) {
+        this.packService = packService;
+        this.packQueryService = packQueryService;
     }
 
     /**
@@ -48,7 +53,7 @@ public class PackResource {
         if (pack.getId() != null) {
             throw new BadRequestAlertException("A new pack cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Pack result = packRepository.save(pack);
+        Pack result = packService.save(pack);
         return ResponseEntity.created(new URI("/api/packs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,7 +75,7 @@ public class PackResource {
         if (pack.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Pack result = packRepository.save(pack);
+        Pack result = packService.save(pack);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, pack.getId().toString()))
             .body(result);
@@ -79,13 +84,28 @@ public class PackResource {
     /**
      * GET  /packs : get all the packs.
      *
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of packs in body
      */
     @GetMapping("/packs")
     @Timed
-    public List<Pack> getAllPacks() {
-        log.debug("REST request to get all Packs");
-        return packRepository.findAll();
+    public ResponseEntity<List<Pack>> getAllPacks(PackCriteria criteria) {
+        log.debug("REST request to get Packs by criteria: {}", criteria);
+        List<Pack> entityList = packQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+    * GET  /packs/count : count all the packs.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/packs/count")
+    @Timed
+    public ResponseEntity<Long> countPacks(PackCriteria criteria) {
+        log.debug("REST request to count Packs by criteria: {}", criteria);
+        return ResponseEntity.ok().body(packQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -98,7 +118,7 @@ public class PackResource {
     @Timed
     public ResponseEntity<Pack> getPack(@PathVariable Long id) {
         log.debug("REST request to get Pack : {}", id);
-        Optional<Pack> pack = packRepository.findById(id);
+        Optional<Pack> pack = packService.findOne(id);
         return ResponseUtil.wrapOrNotFound(pack);
     }
 
@@ -112,8 +132,7 @@ public class PackResource {
     @Timed
     public ResponseEntity<Void> deletePack(@PathVariable Long id) {
         log.debug("REST request to delete Pack : {}", id);
-
-        packRepository.deleteById(id);
+        packService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

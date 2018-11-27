@@ -4,7 +4,10 @@ import frontdesk.com.FrontdeskApp;
 
 import frontdesk.com.domain.Pack;
 import frontdesk.com.repository.PackRepository;
+import frontdesk.com.service.PackService;
 import frontdesk.com.web.rest.errors.ExceptionTranslator;
+import frontdesk.com.service.dto.PackCriteria;
+import frontdesk.com.service.PackQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -69,6 +72,12 @@ public class PackResourceIntTest {
     private PackRepository packRepository;
 
     @Autowired
+    private PackService packService;
+
+    @Autowired
+    private PackQueryService packQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -87,7 +96,7 @@ public class PackResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PackResource packResource = new PackResource(packRepository);
+        final PackResource packResource = new PackResource(packService, packQueryService);
         this.restPackMockMvc = MockMvcBuilders.standaloneSetup(packResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -207,6 +216,335 @@ public class PackResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllPacksByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where name equals to DEFAULT_NAME
+        defaultPackShouldBeFound("name.equals=" + DEFAULT_NAME);
+
+        // Get all the packList where name equals to UPDATED_NAME
+        defaultPackShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultPackShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
+
+        // Get all the packList where name equals to UPDATED_NAME
+        defaultPackShouldNotBeFound("name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where name is not null
+        defaultPackShouldBeFound("name.specified=true");
+
+        // Get all the packList where name is null
+        defaultPackShouldNotBeFound("name.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByNameFrontDeskReceiveIsEqualToSomething() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where nameFrontDeskReceive equals to DEFAULT_NAME_FRONT_DESK_RECEIVE
+        defaultPackShouldBeFound("nameFrontDeskReceive.equals=" + DEFAULT_NAME_FRONT_DESK_RECEIVE);
+
+        // Get all the packList where nameFrontDeskReceive equals to UPDATED_NAME_FRONT_DESK_RECEIVE
+        defaultPackShouldNotBeFound("nameFrontDeskReceive.equals=" + UPDATED_NAME_FRONT_DESK_RECEIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByNameFrontDeskReceiveIsInShouldWork() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where nameFrontDeskReceive in DEFAULT_NAME_FRONT_DESK_RECEIVE or UPDATED_NAME_FRONT_DESK_RECEIVE
+        defaultPackShouldBeFound("nameFrontDeskReceive.in=" + DEFAULT_NAME_FRONT_DESK_RECEIVE + "," + UPDATED_NAME_FRONT_DESK_RECEIVE);
+
+        // Get all the packList where nameFrontDeskReceive equals to UPDATED_NAME_FRONT_DESK_RECEIVE
+        defaultPackShouldNotBeFound("nameFrontDeskReceive.in=" + UPDATED_NAME_FRONT_DESK_RECEIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByNameFrontDeskReceiveIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where nameFrontDeskReceive is not null
+        defaultPackShouldBeFound("nameFrontDeskReceive.specified=true");
+
+        // Get all the packList where nameFrontDeskReceive is null
+        defaultPackShouldNotBeFound("nameFrontDeskReceive.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByNameFrontDeskDeliveryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where nameFrontDeskDelivery equals to DEFAULT_NAME_FRONT_DESK_DELIVERY
+        defaultPackShouldBeFound("nameFrontDeskDelivery.equals=" + DEFAULT_NAME_FRONT_DESK_DELIVERY);
+
+        // Get all the packList where nameFrontDeskDelivery equals to UPDATED_NAME_FRONT_DESK_DELIVERY
+        defaultPackShouldNotBeFound("nameFrontDeskDelivery.equals=" + UPDATED_NAME_FRONT_DESK_DELIVERY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByNameFrontDeskDeliveryIsInShouldWork() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where nameFrontDeskDelivery in DEFAULT_NAME_FRONT_DESK_DELIVERY or UPDATED_NAME_FRONT_DESK_DELIVERY
+        defaultPackShouldBeFound("nameFrontDeskDelivery.in=" + DEFAULT_NAME_FRONT_DESK_DELIVERY + "," + UPDATED_NAME_FRONT_DESK_DELIVERY);
+
+        // Get all the packList where nameFrontDeskDelivery equals to UPDATED_NAME_FRONT_DESK_DELIVERY
+        defaultPackShouldNotBeFound("nameFrontDeskDelivery.in=" + UPDATED_NAME_FRONT_DESK_DELIVERY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByNameFrontDeskDeliveryIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where nameFrontDeskDelivery is not null
+        defaultPackShouldBeFound("nameFrontDeskDelivery.specified=true");
+
+        // Get all the packList where nameFrontDeskDelivery is null
+        defaultPackShouldNotBeFound("nameFrontDeskDelivery.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByNamePickupIsEqualToSomething() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where namePickup equals to DEFAULT_NAME_PICKUP
+        defaultPackShouldBeFound("namePickup.equals=" + DEFAULT_NAME_PICKUP);
+
+        // Get all the packList where namePickup equals to UPDATED_NAME_PICKUP
+        defaultPackShouldNotBeFound("namePickup.equals=" + UPDATED_NAME_PICKUP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByNamePickupIsInShouldWork() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where namePickup in DEFAULT_NAME_PICKUP or UPDATED_NAME_PICKUP
+        defaultPackShouldBeFound("namePickup.in=" + DEFAULT_NAME_PICKUP + "," + UPDATED_NAME_PICKUP);
+
+        // Get all the packList where namePickup equals to UPDATED_NAME_PICKUP
+        defaultPackShouldNotBeFound("namePickup.in=" + UPDATED_NAME_PICKUP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByNamePickupIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where namePickup is not null
+        defaultPackShouldBeFound("namePickup.specified=true");
+
+        // Get all the packList where namePickup is null
+        defaultPackShouldNotBeFound("namePickup.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByDateReceivedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where dateReceived equals to DEFAULT_DATE_RECEIVED
+        defaultPackShouldBeFound("dateReceived.equals=" + DEFAULT_DATE_RECEIVED);
+
+        // Get all the packList where dateReceived equals to UPDATED_DATE_RECEIVED
+        defaultPackShouldNotBeFound("dateReceived.equals=" + UPDATED_DATE_RECEIVED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByDateReceivedIsInShouldWork() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where dateReceived in DEFAULT_DATE_RECEIVED or UPDATED_DATE_RECEIVED
+        defaultPackShouldBeFound("dateReceived.in=" + DEFAULT_DATE_RECEIVED + "," + UPDATED_DATE_RECEIVED);
+
+        // Get all the packList where dateReceived equals to UPDATED_DATE_RECEIVED
+        defaultPackShouldNotBeFound("dateReceived.in=" + UPDATED_DATE_RECEIVED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByDateReceivedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where dateReceived is not null
+        defaultPackShouldBeFound("dateReceived.specified=true");
+
+        // Get all the packList where dateReceived is null
+        defaultPackShouldNotBeFound("dateReceived.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByDateReceivedIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where dateReceived greater than or equals to DEFAULT_DATE_RECEIVED
+        defaultPackShouldBeFound("dateReceived.greaterOrEqualThan=" + DEFAULT_DATE_RECEIVED);
+
+        // Get all the packList where dateReceived greater than or equals to UPDATED_DATE_RECEIVED
+        defaultPackShouldNotBeFound("dateReceived.greaterOrEqualThan=" + UPDATED_DATE_RECEIVED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByDateReceivedIsLessThanSomething() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where dateReceived less than or equals to DEFAULT_DATE_RECEIVED
+        defaultPackShouldNotBeFound("dateReceived.lessThan=" + DEFAULT_DATE_RECEIVED);
+
+        // Get all the packList where dateReceived less than or equals to UPDATED_DATE_RECEIVED
+        defaultPackShouldBeFound("dateReceived.lessThan=" + UPDATED_DATE_RECEIVED);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllPacksByDatePickupIsEqualToSomething() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where datePickup equals to DEFAULT_DATE_PICKUP
+        defaultPackShouldBeFound("datePickup.equals=" + DEFAULT_DATE_PICKUP);
+
+        // Get all the packList where datePickup equals to UPDATED_DATE_PICKUP
+        defaultPackShouldNotBeFound("datePickup.equals=" + UPDATED_DATE_PICKUP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByDatePickupIsInShouldWork() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where datePickup in DEFAULT_DATE_PICKUP or UPDATED_DATE_PICKUP
+        defaultPackShouldBeFound("datePickup.in=" + DEFAULT_DATE_PICKUP + "," + UPDATED_DATE_PICKUP);
+
+        // Get all the packList where datePickup equals to UPDATED_DATE_PICKUP
+        defaultPackShouldNotBeFound("datePickup.in=" + UPDATED_DATE_PICKUP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByDatePickupIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where datePickup is not null
+        defaultPackShouldBeFound("datePickup.specified=true");
+
+        // Get all the packList where datePickup is null
+        defaultPackShouldNotBeFound("datePickup.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByDatePickupIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where datePickup greater than or equals to DEFAULT_DATE_PICKUP
+        defaultPackShouldBeFound("datePickup.greaterOrEqualThan=" + DEFAULT_DATE_PICKUP);
+
+        // Get all the packList where datePickup greater than or equals to UPDATED_DATE_PICKUP
+        defaultPackShouldNotBeFound("datePickup.greaterOrEqualThan=" + UPDATED_DATE_PICKUP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPacksByDatePickupIsLessThanSomething() throws Exception {
+        // Initialize the database
+        packRepository.saveAndFlush(pack);
+
+        // Get all the packList where datePickup less than or equals to DEFAULT_DATE_PICKUP
+        defaultPackShouldNotBeFound("datePickup.lessThan=" + DEFAULT_DATE_PICKUP);
+
+        // Get all the packList where datePickup less than or equals to UPDATED_DATE_PICKUP
+        defaultPackShouldBeFound("datePickup.lessThan=" + UPDATED_DATE_PICKUP);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultPackShouldBeFound(String filter) throws Exception {
+        restPackMockMvc.perform(get("/api/packs?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(pack.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].nameFrontDeskReceive").value(hasItem(DEFAULT_NAME_FRONT_DESK_RECEIVE.toString())))
+            .andExpect(jsonPath("$.[*].nameFrontDeskDelivery").value(hasItem(DEFAULT_NAME_FRONT_DESK_DELIVERY.toString())))
+            .andExpect(jsonPath("$.[*].namePickup").value(hasItem(DEFAULT_NAME_PICKUP.toString())))
+            .andExpect(jsonPath("$.[*].dateReceived").value(hasItem(DEFAULT_DATE_RECEIVED.toString())))
+            .andExpect(jsonPath("$.[*].datePickup").value(hasItem(DEFAULT_DATE_PICKUP.toString())))
+            .andExpect(jsonPath("$.[*].pixelContentType").value(hasItem(DEFAULT_PIXEL_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].pixel").value(hasItem(Base64Utils.encodeToString(DEFAULT_PIXEL))));
+
+        // Check, that the count call also returns 1
+        restPackMockMvc.perform(get("/api/packs/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultPackShouldNotBeFound(String filter) throws Exception {
+        restPackMockMvc.perform(get("/api/packs?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restPackMockMvc.perform(get("/api/packs/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+
+    @Test
+    @Transactional
     public void getNonExistingPack() throws Exception {
         // Get the pack
         restPackMockMvc.perform(get("/api/packs/{id}", Long.MAX_VALUE))
@@ -217,7 +555,7 @@ public class PackResourceIntTest {
     @Transactional
     public void updatePack() throws Exception {
         // Initialize the database
-        packRepository.saveAndFlush(pack);
+        packService.save(pack);
 
         int databaseSizeBeforeUpdate = packRepository.findAll().size();
 
@@ -276,7 +614,7 @@ public class PackResourceIntTest {
     @Transactional
     public void deletePack() throws Exception {
         // Initialize the database
-        packRepository.saveAndFlush(pack);
+        packService.save(pack);
 
         int databaseSizeBeforeDelete = packRepository.findAll().size();
 
