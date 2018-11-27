@@ -1,0 +1,12 @@
+entity Pack{
+	 
+     name String
+	 nameFrontDeskReceive String
+	 nameFrontDeskDelivery String
+	 namePickup String
+	 dateReceived LocalDate
+	 datePickup LocalDate
+	 pixel ImageBlob
+}
+
+filter Pack
