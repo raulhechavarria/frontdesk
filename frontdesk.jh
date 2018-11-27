@@ -8,3 +8,5 @@ entity Pack{
 	 datePickup LocalDate
 	 pixel ImageBlob
 }
+
+filter Pack
